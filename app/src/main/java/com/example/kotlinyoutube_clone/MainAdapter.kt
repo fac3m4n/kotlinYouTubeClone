@@ -1,5 +1,6 @@
 package com.example.kotlinyoutube_clone
 
+import android.content.Intent
 import android.icu.number.NumberFormatter.with
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,8 @@ class MainAdapter(val homeFeed: HomeFeed): RecyclerView.Adapter<CustomHolderView
         val video = homeFeed.videos[position]
         holder.view.textView_video_title.text = video.name
 
-        holder.view.textView_channel_name.text = video.channel.name + " · " + "20K views\n 4 days ago"
+
+        holder.view.textView_channel_name.text = video.channel.name
 
         val thumbnailImageView = holder.view.imageView_video_thumb
         Picasso.get().load(video.imageUrl).into(thumbnailImageView)
@@ -43,4 +45,11 @@ class MainAdapter(val homeFeed: HomeFeed): RecyclerView.Adapter<CustomHolderView
 
 class CustomHolderView(val view: View): RecyclerView.ViewHolder(view){
 
+    init {
+        view.setOnClickListener {
+            val intent = Intent(view.context, CourseDetailActivity::class.java)
+
+            view.context.startActivity(intent)
+        }
+    }
 }
