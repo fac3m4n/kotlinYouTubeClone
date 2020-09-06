@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.*
+import java.io.IOException
 
 class CourseDetailActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +22,38 @@ class CourseDetailActivity : AppCompatActivity(){
         recyclerView_main.layoutManager = LinearLayoutManager(this)
         recyclerView_main.adapter = CourseDetailAdapter()
 
+        // changing nav bar title
+        val NavBarTitle = intent.getStringExtra(CustomHolderView.VIDEO_TITLE_KEY)
+        supportActionBar?.title = NavBarTitle
+
+
+
+        fetchJSON()
+
+    }
+
+    private fun fetchJSON(){
+        val videoId = intent.getIntExtra(CustomHolderView.VIDEO_ID_KEY, -1)
+        val courseDetailUrl = "https://api.letsbuildthatapp.com/youtube/course_detail?id=" + videoId
+
+        val client = OkHttpClient()
+        val request = Request.Builder().url(courseDetailUrl).build()
+        client.newCall(request).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: IOException) {
+
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response?.body?.string()
+
+                val gson = GsonBuilder().create()
+
+                val courseLesson = gson.fromJson(body, Array<CourseLesson>::class.java)
+
+
+                println(body)
+            }
+        })
     }
 
     private class CourseDetailAdapter: RecyclerView.Adapter<CourseLessonViewHolder>() {
