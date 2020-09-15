@@ -1,5 +1,6 @@
 package com.example.kotlinyoutube_clone
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -79,7 +80,17 @@ class CourseDetailActivity : AppCompatActivity(){
         }
     }
 
-    private class CourseLessonViewHolder(val customView: View): RecyclerView.ViewHolder(customView)
+    private class CourseLessonViewHolder(val customView: View): RecyclerView.ViewHolder(customView){
+        init {
+            customView.setOnClickListener {
+//                println("something")
+                val intent = Intent(customView.context, CourseLessonActivity::class.java)
+                customView.context.startActivity(intent)
+
+            }
+
+        }
+    }
 
 
 }
